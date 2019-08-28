@@ -4,9 +4,8 @@ import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      Weather App
-      <WeatherLocation></WeatherLocation>
+    <div className="App">   
+      <WeatherLocation/>
     </div>
   );
 }
