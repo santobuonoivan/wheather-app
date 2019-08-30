@@ -1,41 +1,45 @@
 import React, {Component} from 'react';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { PropTypes } from 'prop-types';
+import TransformWeather from './../../services/transformWeather';
+import getUrlWeatherByCity from './../../services/getUrlWeatherByCity';
 import Location from './Location';
 import WeatherData from './WeatherData';
 import './styles.css';
-import {    
-    SUN,
-    WINDY
-} from './../../constants/weathers';
 
-const data = {
-    temperature: 10,
-    weatherState: SUN,
-    humidity:10,
-    wind: '10m/s',
-}
-
-const data2 = {
-    temperature: 10,
-    weatherState: WINDY,
-    humidity:10,
-    wind: '10m/s',
-}
 
 class WeatherLocation extends Component {
 
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
+        const { city } = props;
         this.state = {
-            city: 'Buenos Aires',
-            data: data,
+            city,
+            data: null,
         };
     };
 
+
+    componentDidMount() {
+        this.handleUpdateClick();
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        
+    }   
+    
+    
     handleUpdateClick = () => {
-        console.log('Actualizado');
-        this.setState({
-            city: 'Buenos Aires!',
-            data: data2,
+        const api_weather =  getUrlWeatherByCity(this.state.city)
+        fetch(api_weather)
+        .then( resolve => {
+            return resolve.json();
+        })
+        .then( data => {
+            const newWeather = TransformWeather(data);
+            this.setState({
+               data: newWeather,
+            });
         });
     };
 
@@ -44,11 +48,14 @@ class WeatherLocation extends Component {
         return (
             <div className='weatherLocationCont'>
                 <Location city={city}/>
-                <WeatherData data={data}/>
-                <button onClick={this.handleUpdateClick}>Actualizar</button>
+                {data ? <WeatherData data={data}/> : <CircularProgress size={50} /> } 
             </div>
         );
     };
 };
+
+WeatherLocation.protoTypes = {
+    city: PropTypes.string.isRequired,
+}
 
 export default WeatherLocation;
