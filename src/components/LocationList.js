@@ -4,10 +4,10 @@ import WeatherLocation from './WeatherLocation';
 import './styles.css';
 
 
-const LocationList = ( {cities, onselectedLocation } ) => {
+const LocationList = ( {cities, onSelectedLocation } ) => {
     const handleWeatherLocationClick = city => {
         console.log('handleWeatherLocationClick');
-        onselectedLocation(city);
+        onSelectedLocation(city);
     }
 
     const strToComponents = cities => (
