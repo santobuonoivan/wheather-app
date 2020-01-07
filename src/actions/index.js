@@ -2,9 +2,7 @@ import { api_key, url_base_forecast } from './../constants/api_url';
 import transformForecast from './../services/transformForecast';
 import transformWeather from './../services/transformWeather';
 import getUrlWeatherByCity from './../services/getUrlWeatherByCity';
-
-
-
+//import { getCity } from '../reducers';
 
 export const SET_CITY = 'SET_CITY';
 export const SET_FORECAST_DATA = 'SET_FORECAST_DATA';
@@ -19,11 +17,17 @@ const getWeatherCity = payload => ({ type: GET_WEATHER_CITY, payload});
 const setWeatherCity = payload => ({ type: SET_WEATHER_CITY, payload});
 
 export const setSelectedCity = payload => {
-    return dispatch => {
+    return (dispatch, getState) => {
         const url_forecast = `${url_base_forecast}?q=${payload}&APPID=${api_key}&units=metric`;
         
         // activar indicador de busqueda en el estado
         dispatch(setCity(payload));
+        // ahorro de datos para el forecastas data
+        const state = getState();
+        const date = state.cities[payload] && state.cities[payload].forecastDataDate;
+        const now = new Date();
+
+        if( date && (now - date)< 1 * 60 * 1000) return;
         return fetch(url_forecast).then(
             data => (data.json())
         ).then(

@@ -28,6 +28,7 @@ export class LocationListContainer extends Component {
 
 LocationListContainer.propTypes = {
     setCity: PropTypes.func.isRequired,
+    setWeather: PropTypes.func.isRequired,
     cities: PropTypes.array.isRequired,
     citiesWeather: PropTypes.array,
     city: PropTypes.string.isRequired
